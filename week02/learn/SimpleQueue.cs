@@ -12,6 +12,8 @@
         Console.WriteLine(value);
         // Defect(s) Found:
 
+        //The Dequeue method was using index 1 instead of 0, so it couldn't correctly retrieve the first item added to the queue.
+
         Console.WriteLine("------------");
 
         // Test 2
@@ -30,6 +32,8 @@
         Console.WriteLine(value);
         // Defect(s) Found: 
 
+        // Enqueue used Insert(0) instead of Add, causing the items to be stored in the wrong order (LIFO instead of FIFO).
+
         Console.WriteLine("------------");
 
         // Test 3
@@ -45,6 +49,8 @@
             Console.WriteLine("I got the exception as expected.");
         }
         // Defect(s) Found: 
+
+        //Dequeue used index 1 instead of 0, which failed to remove the item at the front of the queue.
     }
 
     private readonly List<int> _queue = new();
@@ -54,7 +60,7 @@
     /// </summary>
     /// <param name="value">Integer value to add to the queue</param>
     private void Enqueue(int value) {
-        _queue.Insert(0, value);
+        _queue.Add(value);
     }
 
     /// <summary>
@@ -66,8 +72,8 @@
         if (_queue.Count <= 0)
             throw new IndexOutOfRangeException();
 
-        var value = _queue[1];
-        _queue.RemoveAt(1);
+        var value = _queue[0];
+        _queue.RemoveAt(0);
         return value;
     }
 }
