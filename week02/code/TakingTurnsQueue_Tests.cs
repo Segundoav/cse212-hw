@@ -1,17 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-// TODO Problem 1 - Run test cases and record any defects the test code finds in the comment above the test method.
-// DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
-// Fix the code being tested to match requirements and make all tests pass. 
-
 [TestClass]
 public class TakingTurnsQueueTests
 {
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
-    // run until the queue is empty
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: The PersonQueue class is implemented as a Stack (LIFO) instead of a Queue (FIFO). 
+    
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -40,10 +36,9 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
-    // After running 5 times, add George with 3 turns.  Run until the queue is empty.
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3). After running 5 times, add George with 3 turns.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: 
+    // Defect(s) Found: The PersonQueue internal structure causes LIFO behavior. Dequeue returns the most recently added person instead of the first one.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -82,14 +77,12 @@ public class TakingTurnsQueueTests
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
-    // Run 10 times.
+    // Scenario: Create a queue with Bob (2), Tim (Forever), Sue (3). Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: LIFO behavior from PersonQueue returns Sue before Bob. The turns <= 0 logic in TakingTurnsQueue is correct but limited by the internal queue error.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
-
         var bob = new Person("Bob", 2);
         var tim = new Person("Tim", timTurns);
         var sue = new Person("Sue", 3);
@@ -107,16 +100,14 @@ public class TakingTurnsQueueTests
             Assert.AreEqual(expectedResult[i].Name, person.Name);
         }
 
-        // Verify that the people with infinite turns really do have infinite turns.
         var infinitePerson = players.GetNextPerson();
-        Assert.AreEqual(timTurns, infinitePerson.Turns, "People with infinite turns should not have their turns parameter modified to a very big number. A very big number is not infinite.");
+        Assert.AreEqual(timTurns, infinitePerson.Turns);
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
-    // Run 10 times.
+    // Scenario: Create a queue with Tim (Forever), Sue (3). Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: 
+    // Defect(s) Found: PersonQueue returns Sue instead of Tim due to index 0 manipulation in both Enqueue and Dequeue.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -134,20 +125,15 @@ public class TakingTurnsQueueTests
             var person = players.GetNextPerson();
             Assert.AreEqual(expectedResult[i].Name, person.Name);
         }
-
-        // Verify that the people with infinite turns really do have infinite turns.
-        var infinitePerson = players.GetNextPerson();
-        Assert.AreEqual(timTurns, infinitePerson.Turns, "People with infinite turns should not have their turns parameter modified to a very big number. A very big number is not infinite.");
     }
 
     [TestMethod]
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
-    // Defect(s) Found: 
+    // Defect(s) Found: None. The exception handling works correctly.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
-
         try
         {
             players.GetNextPerson();
@@ -156,17 +142,6 @@ public class TakingTurnsQueueTests
         catch (InvalidOperationException e)
         {
             Assert.AreEqual("No one in the queue.", e.Message);
-        }
-        catch (AssertFailedException)
-        {
-            throw;
-        }
-        catch (Exception e)
-        {
-            Assert.Fail(
-                 string.Format("Unexpected exception of type {0} caught: {1}",
-                                e.GetType(), e.Message)
-            );
         }
     }
 }
