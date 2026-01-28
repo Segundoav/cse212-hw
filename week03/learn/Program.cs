@@ -9,5 +9,6 @@ public class Program
 
         Console.WriteLine("\n======================\nTranslator\n======================");
         Translator.Run();
+        FirstDuplicate.Run();
     }
 }
