@@ -1,4 +1,5 @@
-﻿Console.WriteLine("\n======================\nUnique Letters\n======================");
+﻿using week03.teach;
+Console.WriteLine("\n======================\nUnique Letters\n======================");
 UniqueLetters.Run();
 
 Console.WriteLine("\n======================\nDisplay Sums\n======================");

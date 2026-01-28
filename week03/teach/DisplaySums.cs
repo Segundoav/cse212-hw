@@ -1,4 +1,7 @@
-﻿public static class DisplaySums {
+﻿using System;
+using System.Collections.Generic;
+
+public static class DisplaySums {
     public static void Run() {
         DisplaySumPairs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         // Should show something like (order does not matter):
@@ -28,6 +31,22 @@
     /// </summary>
     /// <param name="numbers">array of integers</param>
     private static void DisplaySumPairs(int[] numbers) {
-        // TODO Problem 2 - This should print pairs of numbers in the given array
+        // Initialize a HashSet to store the numbers we have already seen
+        // This allows for O(1) lookup time
+        HashSet<int> seen = new HashSet<int>();
+
+        foreach (var n in numbers) {
+            // Calculate the target value needed to reach a sum of 10
+            int target = 10 - n;
+
+            // Check if the target is already in our set
+            if (seen.Contains(target)) {
+                // If found, we print the pair. This ensures O(n) total performance
+                Console.WriteLine($"{n} {target}");
+            }
+
+            // Add the current number to the set for future comparisons
+            seen.Add(n);
+        }
     }
 }
