@@ -11,35 +11,43 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
-
-        if (value < Data)
+        if (value < Data) // Ir a la izquierda
         {
-            // Insert to the left
-            if (Left is null)
+            if (Left is null) 
                 Left = new Node(value);
             else
-                Left.Insert(value);
+                Left.Insert(value);    
+                
         }
-        else
+        else if (value > Data) // Ir a la derecha
         {
-            // Insert to the right
-            if (Right is null)
+            if (Right is null) 
                 Right = new Node(value);
             else
-                Right.Insert(value);
+                Right.Insert(value);    
         }
+        // Si value == Data, no hacemos nada (esto elimina el fallo del 7 duplicado)
     }
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
-        return false;
+        if (value == Data) return true; // Lo encontramos
+        if (value < Data) // Buscar a la izquierda
+        {
+            return Left != null && Left.Contains(value);
+        }
+        else // Buscar a la derecha
+        {
+            return Right != null && Right.Contains(value);
+        }
     }
-
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        // Calculamos la altura de los hijos; si no existen, su altura es 0
+        int leftHeight = Left?.GetHeight() ?? 0;
+        int rightHeight = Right?.GetHeight() ?? 0;
+        
+        // Sumamos 1 (por el nodo actual) al máximo de las dos ramas
+        return 1 + Math.Max(leftHeight, rightHeight);
     }
 }

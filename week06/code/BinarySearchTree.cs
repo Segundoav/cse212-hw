@@ -9,18 +9,10 @@ public class BinarySearchTree : IEnumerable<int>
     /// </summary>
     public void Insert(int value)
     {
-        // Create new node
-        Node newNode = new(value);
-        // If the list is empty, then point both head and tail to the new node.
-        if (_root is null)
-        {
-            _root = newNode;
-        }
-        // If the list is not empty, then only head will be affected.
+        if (_root == null)
+            _root = new Node(value);
         else
-        {
             _root.Insert(value);
-        }
     }
 
     /// <summary>
@@ -78,10 +70,7 @@ public class BinarySearchTree : IEnumerable<int>
         }
     }
 
-    private void TraverseBackward(Node? node, List<int> values)
-    {
-        // TODO Problem 3
-    }
+    
 
     /// <summary>
     /// Get the height of the tree
@@ -96,6 +85,35 @@ public class BinarySearchTree : IEnumerable<int>
     public override string ToString()
     {
         return "<Bst>{" + string.Join(", ", this) + "}";
+    }
+    
+    private void TraverseBackward(Node? node, List<int> values)
+    {
+        if (node is not null)
+        {
+            // Para ir en reversa: Derecha, Nodo, Izquierda
+            TraverseBackward(node.Right, values);
+            values.Add(node.Data);
+            TraverseBackward(node.Left, values);
+        }
+    }
+
+    public static BinarySearchTree CreateTreeFromSortedList(int[] sortedList)
+    {
+        var bst = new BinarySearchTree();
+        InsertMiddle(bst, sortedList, 0, sortedList.Length - 1);
+        return bst; // <--- ESTA LÍNEA ES VITAL. Si no está, el árbol siempre llega vacío.
+    }
+
+    private static void InsertMiddle(BinarySearchTree bst, int[] list, int first, int last)
+    {
+        if (first > last) return;
+
+        int middle = (first + last) / 2;
+        bst.Insert(list[middle]);
+
+        InsertMiddle(bst, list, first, middle - 1);
+        InsertMiddle(bst, list, middle + 1, last);
     }
 }
 
