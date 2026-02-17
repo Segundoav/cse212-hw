@@ -32,6 +32,7 @@ public class Node
     public bool Contains(int value)
     {
         if (value == Data) return true; // Lo encontramos
+            
         if (value < Data) // Buscar a la izquierda
         {
             return Left != null && Left.Contains(value);
